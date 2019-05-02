@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "233347627202",
+    "firebase_url": "https://mesh-a6e93.firebaseio.com",
+    "project_id": "mesh-a6e93",
+    "storage_bucket": "mesh-a6e93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233347627202:android:adf3c7ab1f0e51e9",
+        "android_client_info": {
+          "package_name": "com.jocelyne.mesh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233347627202-b8o7lp5pt3gis7ifh9mq92kbjolad3ho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv9C8kR-ArPs9jrZ_yCEvCfoc_K8EWjxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233347627202-b8o7lp5pt3gis7ifh9mq92kbjolad3ho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

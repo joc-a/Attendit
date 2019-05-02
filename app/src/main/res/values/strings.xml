@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Mesh</string>
+
+    <!-- Sign Up/Login -->
+    <string name="action_sign_up">Sign Up</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_first_name">First name</string>
+    <string name="prompt_last_name">Last name</string>
+    <string name="action_login">Login</string>
+    <string name="title_activity_sign_up">Sign in</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="instructor">Instructor</string>
+    <string name="student">Student</string>
+    <string name="prompt_student_id">Student ID</string>
+    <string name="instructor_login">Instructor Login</string>
+    <string name="student_login">Student Login</string>
+    <string name="prompt_select_account_type">Select your account type</string>
+    <string name="add_class">Add class</string>
+
+</resources>
