@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -124,8 +125,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private boolean login(String email, String password) {
-        return FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+    private void login(String email, String password) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -143,25 +144,40 @@ public class LoginActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             User user = documentSnapshot.toObject(isInstructor ? Instructor.class : Student.class);
-                                            SessionManager.Companion.getInstance(getApplicationContext())
-                                                    .createLoginSession(user, id, isInstructor);
+                                            showProgress(false);
+                                            if (user == null) { // wrong account type
+                                                Log.w(TAG, "signInWithEmail: failure cuz wrong account type");
+                                                Snackbar.make(findViewById(R.id.linear_layout),
+                                                        "Authentication failed.", Snackbar.LENGTH_SHORT).show();
+                                            } else {
+                                                SessionManager.Companion.getInstance(getApplicationContext())
+                                                        .createLoginSession(user, id, isInstructor);
+                                                Toast.makeText(LoginActivity.this, "Authentication successful!",
+                                                        Toast.LENGTH_LONG).show();
+                                                startUsingApp();
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            showProgress(false);
+                                            Log.w(TAG, "signInWithEmail: failure", e);
+                                            Snackbar.make(findViewById(R.id.linear_layout),
+                                                    "Authentication failed.", Snackbar.LENGTH_SHORT).show();
                                         }
                                     });
-                            showProgress(false);
-                            Toast.makeText(LoginActivity.this, "Authentication successful!",
-                                    Toast.LENGTH_LONG).show();
-                            startUsingApp();
+
                         } else {
                             showProgress(false);
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail: failure", task.getException());
                             mPasswordView.setError(getString(R.string.error_incorrect_password));
                             mPasswordView.requestFocus();
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_LONG).show();
+                            Snackbar.make(findViewById(R.id.linear_layout),
+                                    "Authentication failed.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
-                }).isSuccessful();
+                });
     }
 
     private void startUsingApp() {
@@ -256,6 +272,15 @@ public class LoginActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
+            mLoginTypeView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginTypeView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginTypeView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
@@ -276,6 +301,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
+            mLoginTypeView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }

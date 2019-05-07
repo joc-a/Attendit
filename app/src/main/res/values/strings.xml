@@ -25,5 +25,10 @@
     <string name="student_login">Student Login</string>
     <string name="prompt_select_account_type">Select your account type</string>
     <string name="add_class">Add class</string>
+    <string name="title_activity_instructor_main">InstructorMainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="classes">Classes</string>
 
 </resources>

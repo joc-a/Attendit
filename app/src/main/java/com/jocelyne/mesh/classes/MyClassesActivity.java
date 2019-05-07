@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jocelyne.mesh.R;
-import com.jocelyne.mesh.classes.create.CreateClassActivity;
+import com.jocelyne.mesh.instructor.classes.create.CreateClassActivity;
 
 public class MyClassesActivity extends AppCompatActivity {
 
@@ -19,7 +19,7 @@ public class MyClassesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_my_classes, menu);
+        getMenuInflater().inflate(R.menu.menu_classes, menu);
         return true;
     }
 

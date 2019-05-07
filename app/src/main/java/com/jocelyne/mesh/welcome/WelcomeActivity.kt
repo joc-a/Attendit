@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import com.jocelyne.mesh.R
 import com.jocelyne.mesh.classes.AvailableClassesActivity
 import com.jocelyne.mesh.classes.MyClassesActivity
+import com.jocelyne.mesh.instructor.main.InstructorMainActivity
 import com.jocelyne.mesh.login.LoginActivity
 import com.jocelyne.mesh.session.SessionManager
 
@@ -22,7 +23,7 @@ class WelcomeActivity : AppCompatActivity() {
             val mainIntent = Intent(this@WelcomeActivity,
                     if (SessionManager.getInstance(applicationContext).isLoggedIn()) {
                         if(SessionManager.getInstance(applicationContext).isInstructor())
-                            MyClassesActivity::class.java
+                            InstructorMainActivity::class.java
                         else
                             AvailableClassesActivity::class.java
                     } else {

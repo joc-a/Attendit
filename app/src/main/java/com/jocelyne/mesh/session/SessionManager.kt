@@ -69,6 +69,10 @@ class SessionManager {
         startActivity(context, intent, null) // TODO modify signout
     }
 
+    fun getUserID(): String {
+        return pref.getString(KEY_USER_ID, "")
+    }
+
     fun updateFirstName(newFirstName: String) {
         editor.putString(KEY_FNAME, newFirstName).commit()
     }
