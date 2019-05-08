@@ -16,6 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.jocelyne.mesh.R
 import com.jocelyne.mesh.instructor.classes.Class
 import kotlinx.android.synthetic.main.activity_create_class.*
+import org.greenrobot.eventbus.EventBus
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class CreateClassActivity : AppCompatActivity() {
@@ -34,7 +37,7 @@ class CreateClassActivity : AppCompatActivity() {
         }
     }
 
-    fun checkFields() {
+    private fun checkFields() {
         // Reset errors
         prefix_et.error = null
         number_et.error = null
@@ -46,19 +49,52 @@ class CreateClassActivity : AppCompatActivity() {
         val number = number_et.text.toString()
         val name = name_et.text.toString()
         val crn = crn_et.text.toString()
-        val start_time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            start_time_picker.hour.toString()
+        var hour: Int
+        var minute: Int
+        var ending = "am"
+        val startTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            hour = start_time_picker.hour
+            minute = start_time_picker.minute
+            if (hour > 12) {
+                hour -= 12
+                ending = "pm"
+            }
+            hour.toString() + ":" + (if (minute == 0) "00" else minute.toString()) + " " + ending
         } else {
-            start_time_picker.currentHour.toString()
+            hour = start_time_picker.currentHour
+            minute = start_time_picker.currentMinute
+            if (hour > 12) {
+                hour -= 12
+                ending = "pm"
+            }
+            hour.toString() + ":" + (if (minute == 0) "00" else minute.toString()) + " " + ending
         }
-        val end_time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            end_time_picker.hour.toString()
+        ending = "am"
+        val endTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            hour = end_time_picker.hour
+            minute = end_time_picker.minute
+            if (hour > 12) {
+                hour -= 12
+                ending = "pm"
+            }
+            hour.toString() + ":" + (if (minute == 0) "00" else minute.toString()) + " " + ending
         } else {
-            end_time_picker.currentHour.toString()
+            hour = end_time_picker.currentHour
+            minute = end_time_picker.currentMinute
+            if (hour > 12) {
+                hour -= 12
+            }
+            hour.toString() + ":" + (if (minute == 0) "00" else minute.toString()) + " " + ending
         }
+        val daysOfTheWeek = weekdaysInitials(weekdays_picker.selectedDaysText)
 
         var cancel = false
         var focusView: View? = null
+
+        if (weekdays_picker.noDaySelected()) {
+            focusView = weekdays_picker
+            cancel = true
+        }
 
         if (TextUtils.isEmpty(crn)) {
             crn_et.error = getString(R.string.error_field_required)
@@ -88,9 +124,22 @@ class CreateClassActivity : AppCompatActivity() {
             focusView?.requestFocus()
         } else {
             showProgress(true)
-            val new_class = Class(prefix, number, name, crn, start_time, end_time, "MWF")
-            createClass(new_class)
+            val newClass = Class(prefix, number, name, crn, startTime, endTime, daysOfTheWeek)
+            createClass(newClass)
         }
+    }
+
+    private fun weekdaysInitials(selectedDaysText: List<String>): String {
+        var res = ""
+        for (day: String in selectedDaysText) {
+            when {
+                day.equals("thursday", true) -> res += "R"
+                day.equals("saturday", true) -> res += "Sat"
+                day.equals("sunday", true) -> res += "Sun"
+                else -> res += day[0]
+            }
+        }
+        return res
     }
 
     /**
@@ -120,7 +169,7 @@ class CreateClassActivity : AppCompatActivity() {
         })
     }
 
-    fun createClass(new_class: Class) {
+    private fun createClass(new_class: Class) {
         val id = FirebaseAuth.getInstance().currentUser!!.uid
         FirebaseFirestore.getInstance().collection("INSTRUCTORS").document(id)
                 .collection("MY_CLASSES").document(new_class.CRN).set(new_class)
@@ -128,8 +177,10 @@ class CreateClassActivity : AppCompatActivity() {
                     showProgress(false)
                     if (task.isSuccessful) {
                         Log.d(TAG, "new class successfully created with ID: " + new_class.CRN)
+                        EventBus.getDefault().postSticky(CreateClassEvent())
                         Toast.makeText(this@CreateClassActivity, "Class added.",
                                 Toast.LENGTH_SHORT).show()
+                        onBackPressed()
                     } else {
                         Log.w(TAG, "create new class: failure", task.exception)
                         Snackbar.make(findViewById(R.id.constraintLayout),
