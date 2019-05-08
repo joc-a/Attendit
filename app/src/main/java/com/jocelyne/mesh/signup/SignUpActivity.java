@@ -73,7 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
         mLastNameView = (EditText) findViewById(R.id.last_name);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
-        mStudentIdView = (EditText) findViewById(R.id.student_id);
+        mStudentIdView = (EditText) findViewById(R.id.student_id_et);
         mStudentIdContainer = findViewById(R.id.student_id_view);
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 

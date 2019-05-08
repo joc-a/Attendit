@@ -71,7 +71,7 @@
                 android:text="Course prefix"/>
 
             <EditText
-                android:id="@+id/prefix_et"
+                android:id="@+id/prefix_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"/>
@@ -86,7 +86,7 @@
                 android:text="Course number"/>
 
             <EditText
-                android:id="@+id/number_et"
+                android:id="@+id/number_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberSigned"/>
@@ -101,7 +101,7 @@
                 android:text="Course name"/>
 
             <EditText
-                android:id="@+id/name_et"
+                android:id="@+id/name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"/>

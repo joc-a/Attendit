@@ -17,8 +17,6 @@ import com.jocelyne.mesh.R
 import com.jocelyne.mesh.instructor.classes.Class
 import kotlinx.android.synthetic.main.activity_create_class.*
 import org.greenrobot.eventbus.EventBus
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class CreateClassActivity : AppCompatActivity() {
@@ -39,15 +37,15 @@ class CreateClassActivity : AppCompatActivity() {
 
     private fun checkFields() {
         // Reset errors
-        prefix_et.error = null
-        number_et.error = null
-        name_et.error = null
+        prefix_tv.error = null
+        number_tv.error = null
+        name_tv.error = null
         crn_et.error = null
 
         // Store values
-        val prefix = prefix_et.text.toString()
-        val number = number_et.text.toString()
-        val name = name_et.text.toString()
+        val prefix = prefix_tv.text.toString()
+        val number = number_tv.text.toString()
+        val name = name_tv.text.toString()
         val crn = crn_et.text.toString()
         var hour: Int
         var minute: Int
@@ -103,20 +101,20 @@ class CreateClassActivity : AppCompatActivity() {
         }
 
         if (TextUtils.isEmpty(name)) {
-            name_et.error = getString(R.string.error_field_required)
-            focusView = name_et
+            name_tv.error = getString(R.string.error_field_required)
+            focusView = name_tv
             cancel = true
         }
 
         if (TextUtils.isEmpty(number)) {
-            number_et.error = getString(R.string.error_field_required)
-            focusView = number_et
+            number_tv.error = getString(R.string.error_field_required)
+            focusView = number_tv
             cancel = true
         }
 
         if (TextUtils.isEmpty(prefix)) {
-            prefix_et.error = getString(R.string.error_field_required)
-            focusView = prefix_et
+            prefix_tv.error = getString(R.string.error_field_required)
+            focusView = prefix_tv
             cancel = true
         }
 

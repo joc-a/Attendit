@@ -58,7 +58,7 @@ public class ChatApplication extends BaseApplication implements StateObserver, N
 
     @Override
     public void onApplicationStart(Application app) {
-        //loconfigureHype();
+        //configureHype();
     }
 
     @Override

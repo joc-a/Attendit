@@ -54,15 +54,11 @@ class ClassAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mPrefixView: TextView = mView.prefix_et
-        val mNumView: TextView = mView.number_et
-        val mNameView: TextView = mView.name_et
+        val mPrefixView: TextView = mView.prefix_tv
+        val mNumView: TextView = mView.number_tv
+        val mNameView: TextView = mView.name_tv
         val mDaysOfWeek: TextView = mView.days_of_the_week
         val mStartTime: TextView = mView.start_time
         val mEndTime: TextView = mView.end_time
-
-//        override fun toString(): String {
-//            return super.toString() + " '" + mContentView.text + "'"
-//        }
     }
 }

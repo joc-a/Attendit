@@ -2,7 +2,8 @@ package com.jocelyne.mesh.instructor.classes;
 
 import com.jocelyne.mesh.session.Student;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Class {
 
@@ -17,12 +18,12 @@ public class Class {
     public String endTime;
     public String daysOfTheWeek;
 
-    // student list
-    public ArrayList<Student> students;
+    // hashmap for student id and student object
+    public Map<String, Student> studentsMap;
 
     public Class() {}
 
-    // without students
+    // without studentsMap
     public Class(String prefix, String number, String name, String CRN,
                  String startTime, String endTime, String daysOfTheWeek) {
         this.prefix = prefix;
@@ -32,13 +33,13 @@ public class Class {
         this.startTime = startTime;
         this.endTime = endTime;
         this.daysOfTheWeek = daysOfTheWeek;
-        this.students = new ArrayList<>(); // empty student list
+        this.studentsMap = new HashMap<>(); // empty student list
     }
 
-    // with students
+    // with studentsMap
     public Class(String prefix, String number, String name, String CRN,
                  String startTime, String endTime, String daysOfTheWeek,
-                 ArrayList<Student> students) {
+                 HashMap<String, Student> studentsMap) {
         this.prefix = prefix;
         this.number = number;
         this.name = name;
@@ -46,6 +47,6 @@ public class Class {
         this.startTime = startTime;
         this.endTime = endTime;
         this.daysOfTheWeek = daysOfTheWeek;
-        this.students = students;
+        this.studentsMap = studentsMap;
     }
 }

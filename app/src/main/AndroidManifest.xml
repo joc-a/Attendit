@@ -36,9 +36,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".instructor.classes.ClassActivity"></activity>
         <activity
             android:name=".instructor.main.InstructorMainActivity"
-            android:label="@string/title_activity_instructor_main"></activity>
+            android:label="@string/title_activity_instructor_main" />
         <activity android:name=".instructor.classes.create.CreateClassActivity" />
         <activity android:name=".classes.AvailableClassesActivity" />
         <activity android:name=".welcome.WelcomeActivity">
