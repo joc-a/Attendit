@@ -28,13 +28,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.jocelyne.mesh.classes.AvailableClassesActivity;
-import com.jocelyne.mesh.classes.MyClassesActivity;
 import com.jocelyne.mesh.R;
+import com.jocelyne.mesh.instructor.main.InstructorMainActivity;
 import com.jocelyne.mesh.session.Instructor;
 import com.jocelyne.mesh.session.SessionManager;
 import com.jocelyne.mesh.session.Student;
 import com.jocelyne.mesh.session.User;
+import com.jocelyne.mesh.student.StudentMainActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -170,9 +170,9 @@ public class SignUpActivity extends AppCompatActivity {
     private void startUsingApp() {
         Intent i;
         if (isInstructor) {
-            i = new Intent(SignUpActivity.this, MyClassesActivity.class);
+            i = new Intent(SignUpActivity.this, InstructorMainActivity.class);
         } else {
-            i = new Intent(SignUpActivity.this, AvailableClassesActivity.class);
+            i = new Intent(SignUpActivity.this, StudentMainActivity.class);
         }
         startActivity(i);
         finish();

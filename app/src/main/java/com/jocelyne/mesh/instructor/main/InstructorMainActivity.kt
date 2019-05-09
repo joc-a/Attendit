@@ -1,18 +1,21 @@
 package com.jocelyne.mesh.instructor.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import com.google.gson.Gson
 import com.jocelyne.mesh.R
+import com.jocelyne.mesh.instructor.hype.OngoingClassActivity
 import com.jocelyne.mesh.instructor.classes.Class
 import com.jocelyne.mesh.instructor.classes.ClassActivity
 import com.jocelyne.mesh.instructor.classes.ClassesFragment
+import com.jocelyne.mesh.instructor.dashboard.DashboardFragment
 import kotlinx.android.synthetic.main.activity_instructor_main.*
 
-class InstructorMainActivity : AppCompatActivity(), ClassesFragment.OnClassesFragmentInteractionListener {
+class InstructorMainActivity : AppCompatActivity(),
+        ClassesFragment.OnClassesFragmentInteractionListener, DashboardFragment.OnDashboardFragmentInteractionListener {
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -56,6 +59,11 @@ class InstructorMainActivity : AppCompatActivity(), ClassesFragment.OnClassesFra
         // go to class activity
         val intent = Intent(this, ClassActivity::class.java)
         intent.putExtra("classID", item!!.CRN)
+        startActivity(intent)
+    }
+
+    override fun onDashboardFragmentInteraction(uri: Uri) {
+        val intent = Intent(this, OngoingClassActivity::class.java)
         startActivity(intent)
     }
 }

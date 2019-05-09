@@ -32,14 +32,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.jocelyne.mesh.classes.AvailableClassesActivity;
-import com.jocelyne.mesh.classes.MyClassesActivity;
 import com.jocelyne.mesh.R;
+import com.jocelyne.mesh.instructor.main.InstructorMainActivity;
 import com.jocelyne.mesh.session.Instructor;
 import com.jocelyne.mesh.session.SessionManager;
 import com.jocelyne.mesh.session.Student;
 import com.jocelyne.mesh.session.User;
 import com.jocelyne.mesh.signup.SignUpActivity;
+import com.jocelyne.mesh.student.StudentMainActivity;
 
 /**
  * A login screen that offers login via email/password.
@@ -183,9 +183,9 @@ public class LoginActivity extends AppCompatActivity {
     private void startUsingApp() {
         Intent i;
         if (isInstructor) {
-            i = new Intent(LoginActivity.this, MyClassesActivity.class);
+            i = new Intent(LoginActivity.this, InstructorMainActivity.class);
         } else {
-            i = new Intent(LoginActivity.this, AvailableClassesActivity.class);
+            i = new Intent(LoginActivity.this, StudentMainActivity.class);
         }
         startActivity(i);
         finish();
