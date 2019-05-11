@@ -1,4 +1,4 @@
-package com.jocelyne.mesh.student.hype;
+package com.jocelyne.mesh.instructor.hype;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,24 +14,32 @@ import com.hypelabs.hype.MessageObserver;
 import com.hypelabs.hype.NetworkObserver;
 import com.hypelabs.hype.StateObserver;
 import com.jocelyne.mesh.MyApplication;
-import com.jocelyne.mesh.student.main.StudentMainActivity;
+import com.jocelyne.mesh.session.Student;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
-public class StudentApplication extends Application implements StateObserver, NetworkObserver, MessageObserver {
+public class InstructorApplication extends Application implements StateObserver, NetworkObserver, MessageObserver {
 
-    private static final String TAG = StudentApplication.class.getName();
+    private static final String TAG = InstructorApplication.class.getName();
     public static String announcement = android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL;
 
-    private Instance ongoingClassInstance;
     private boolean isConfigured = false;
     private Activity activity;
+
+    /*
+    Instructor variables
+     */
+    private HashSet<Long> hashSet; // predefined hashset of student IDs of type Long because Instance user identifier is of type Long
+    private Map<Long, Student> presentStudentsMap;
 
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
-    public void configureHype() {
+    protected void configureHype() {
         if(isConfigured){
             return;
         }
@@ -58,7 +66,7 @@ public class StudentApplication extends Application implements StateObserver, Ne
         Hype.addMessageObserver(this);
 
         try {
-            Hype.setAnnouncement(StudentApplication.announcement.getBytes("UTF-8"));
+            Hype.setAnnouncement("class".getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             Hype.setAnnouncement(null);
             e.printStackTrace();
@@ -73,8 +81,8 @@ public class StudentApplication extends Application implements StateObserver, Ne
         // necessary to ask for this permission and goes through with the request if that's the
         // case. The `requestHypeToStart()` method is called when the user replies to the permission
         // request. If the permission is denied, BLE will not work.
-        StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
-        studentMainActivity.requestPermissions(studentMainActivity);
+        OngoingClassActivity ongoingClassActivity = OngoingClassActivity.getDefaultInstance();
+        ongoingClassActivity.requestPermissions(ongoingClassActivity);
         isConfigured = true;
     }
 
@@ -152,23 +160,28 @@ public class StudentApplication extends Application implements StateObserver, Ne
     boolean shouldResolveInstance(Instance instance)
     {
         // This method can be used to decide whether an instance is interesting
-        return true;
+        // Resolve instance only if the student ID is in predefined hashset of IDs (only if student is registered in class)
+        return hashSet.contains(instance.getUserIdentifier()) && !presentStudentsMap.containsKey(instance.getUserIdentifier());
     }
 
     @Override
     public void onHypeInstanceFound(Instance instance) {
-        Log.i(TAG, String.format("Hype found instance: %s", instance.getStringIdentifier()));
+        Log.i(TAG, String.format("Hype found instance: %s, with student ID: %s",
+                instance.getStringIdentifier(), instance.getUserIdentifier()));
 
-        if (shouldResolveInstance(instance)) {
-            Hype.resolve(instance);
+        if(shouldResolveInstance(instance)){
             try {
-                String instanceAnnouncement = new String(instance.getAnnouncement(), "UTF-8");
-                // if student is registered in that class instance
-                if (instanceAnnouncement.equalsIgnoreCase("Check-in successful!")) {
-                    // This device is now capable of communicating
-                    addToResolvedInstancesMap(instance);
-                }
+                Hype.setAnnouncement("Check-in successful!".getBytes("UTF-8"));
             } catch (UnsupportedEncodingException e) {
+                Hype.setAnnouncement(null);
+                e.printStackTrace();
+            }
+            Hype.resolve(instance);
+        } else {
+            try {
+                Hype.setAnnouncement("class".getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                Hype.setAnnouncement(null);
                 e.printStackTrace();
             }
         }
@@ -176,48 +189,58 @@ public class StudentApplication extends Application implements StateObserver, Ne
 
     @Override
     public void onHypeInstanceLost(Instance instance, Error error) {
-        Log.i(TAG, String.format("Hype lost instance: %s [%s]", instance.getStringIdentifier(), error.getDescription()));
+        Log.i(TAG, String.format("Hype lost instance: %s [%s], with student ID: %s",
+                instance.getStringIdentifier(), error.getDescription(), instance.getUserIdentifier()));
 
-        // if it was the class instance that was lost
-        if (instance == ongoingClassInstance) {
-            removeFromResolvedInstancesMap(instance);
-        }
+        removeFromResolvedInstancesMap(instance);
     }
 
     @Override
     public void onHypeInstanceResolved(Instance instance) {
-        Log.i(TAG, String.format("Hype resolved instance: %s", instance.getStringIdentifier()));
+        Log.i(TAG, String.format("Hype resolved instance: %s, with student ID: %s",
+                instance.getStringIdentifier(), instance.getUserIdentifier()));
+
+        // This device is now capable of communicating
+        addToResolvedInstancesMap(instance);
     }
 
     @Override
     public void onHypeInstanceFailResolving(Instance instance, Error error) {
-        Log.i(TAG, String.format("Hype failed resolving instance: %s [%s]",
-                instance.getStringIdentifier(), error.getDescription()));
+        Log.i(TAG, String.format("Hype failed resolving instance: %s [%s], with student ID: %s",
+                instance.getStringIdentifier(), error.getDescription(), instance.getUserIdentifier()));
+    }
+
+    public Map<Long, Student> getPresentStudentsMap() {
+        if (presentStudentsMap == null) {
+            presentStudentsMap = new HashMap<>();
+        }
+        return presentStudentsMap;
     }
 
     public void addToResolvedInstancesMap(Instance instance) {
         // Instances should be strongly kept by some data structure. Their identifiers
         // are useful for keeping track of which instances are ready to communicate.
-        ongoingClassInstance = instance;
+        getPresentStudentsMap().put(instance.getUserIdentifier(), null);
+        // TODO send student info later after resolving
 
-        // Notify the student activity to change the UI
-        StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
+        // Notify the contact activity to refresh the UI
+        OngoingClassActivity ongoingClassActivity = OngoingClassActivity.getDefaultInstance();
 
-        if (studentMainActivity != null) {
-            studentMainActivity.confirmCheckIn();
+        if (ongoingClassActivity != null) {
+            ongoingClassActivity.notifyStudentsChanged();
         }
     }
 
     public void removeFromResolvedInstancesMap(Instance instance) {
         // Cleaning up is always a good idea. It's not possible to communicate with instances
         // that were previously lost.
-        ongoingClassInstance = null;
+        getPresentStudentsMap().remove(instance.getUserIdentifier());
 
-        // Notify the student activity to change the UI
-        StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
+        // Notify the contact activity to refresh the UI
+        OngoingClassActivity ongoingClassActivity = OngoingClassActivity.getDefaultInstance();
 
-        if (studentMainActivity != null) {
-            studentMainActivity.notifyClassLost();
+        if (ongoingClassActivity != null) {
+            ongoingClassActivity.notifyStudentsChanged();
         }
     }
 

@@ -105,6 +105,10 @@ class ClassesFragment : Fragment() {
         classAdapter.notifyDataSetChanged()
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)

@@ -52,6 +52,10 @@ class SessionManager {
         editor.commit()
     }
 
+    fun getStudentId(): Int {
+        return pref.getString(KEY_STUDENT_ID, "").toInt()
+    }
+
     fun isLoggedIn(): Boolean {
         return FirebaseAuth.getInstance().currentUser != null
     }

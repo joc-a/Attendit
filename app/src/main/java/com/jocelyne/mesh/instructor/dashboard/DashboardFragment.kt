@@ -4,11 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 
 import com.jocelyne.mesh.R
+import com.jocelyne.mesh.session.SessionManager
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +32,7 @@ class DashboardFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -42,6 +43,26 @@ class DashboardFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        start_btn.setOnClickListener {
+            listener?.startClass()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_connect, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_sign_out -> SessionManager.getInstance(requireContext()).signOut()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -77,6 +98,7 @@ class DashboardFragment : Fragment() {
     interface OnDashboardFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onDashboardFragmentInteraction(uri: Uri)
+        fun startClass()
     }
 
     companion object {

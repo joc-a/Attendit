@@ -5,6 +5,8 @@ public abstract class User {
     private String lname;
     private String email;
 
+    User() {}
+
     User(String fname, String lname, String email) {
         this.fname = fname;
         this.lname = lname;

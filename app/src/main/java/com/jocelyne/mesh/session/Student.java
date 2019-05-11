@@ -9,6 +9,8 @@ public class Student extends User {
 
     private String studentID;
 
+    public Student() {}
+
     public Student(String fname, String lname, String email, String studentID) {
         super(fname, lname, email);
         this.studentID = studentID;

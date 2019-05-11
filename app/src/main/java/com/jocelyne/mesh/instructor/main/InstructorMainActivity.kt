@@ -25,6 +25,7 @@ class InstructorMainActivity : AppCompatActivity(),
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
+                showConnect()
                 supportActionBar?.title = "Dashboard"
                 return@OnNavigationItemSelectedListener true
             }
@@ -48,6 +49,11 @@ class InstructorMainActivity : AppCompatActivity(),
         openFragment(classesFragment)
     }
 
+    private fun showConnect() {
+        val connectFragment = DashboardFragment.newInstance("", "")
+        openFragment(connectFragment)
+    }
+
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
@@ -63,6 +69,11 @@ class InstructorMainActivity : AppCompatActivity(),
     }
 
     override fun onDashboardFragmentInteraction(uri: Uri) {
+        val intent = Intent(this, OngoingClassActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun startClass() {
         val intent = Intent(this, OngoingClassActivity::class.java)
         startActivity(intent)
     }

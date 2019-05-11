@@ -34,7 +34,7 @@ import com.jocelyne.mesh.session.Instructor;
 import com.jocelyne.mesh.session.SessionManager;
 import com.jocelyne.mesh.session.Student;
 import com.jocelyne.mesh.session.User;
-import com.jocelyne.mesh.student.StudentMainActivity;
+import com.jocelyne.mesh.student.main.StudentMainActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 

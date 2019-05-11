@@ -39,7 +39,7 @@ import com.jocelyne.mesh.session.SessionManager;
 import com.jocelyne.mesh.session.Student;
 import com.jocelyne.mesh.session.User;
 import com.jocelyne.mesh.signup.SignUpActivity;
-import com.jocelyne.mesh.student.StudentMainActivity;
+import com.jocelyne.mesh.student.main.StudentMainActivity;
 
 /**
  * A login screen that offers login via email/password.

@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.jocelyne.mesh.ContactViewAdapter;
+import com.jocelyne.mesh.MyApplication;
 import com.jocelyne.mesh.R;
 
 import java.lang.ref.WeakReference;
@@ -25,10 +25,9 @@ public class OngoingClassActivity extends AppCompatActivity {
 
         ListView listView;
 
-        final MyApplication myApplication = (MyApplication) getApplication();
+        MyApplication myApplication = (MyApplication) getApplication();
         final OngoingClassActivity ongoingClassActivity = this;
         myApplication.setActivity(this);
-        myApplication.configureHype();
 
         listView = (ListView) findViewById(R.id.present_students_list);
         listView.setAdapter(new PresentStudentAdapter(this, myApplication.getPresentStudentsMap()));
@@ -39,9 +38,14 @@ public class OngoingClassActivity extends AppCompatActivity {
         announcementView.setText("Device: " + MyApplication.announcement);
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        MyApplication myApplication = (MyApplication) getApplication();
+        myApplication.configureHype();
 
         // Updates the UI on the press of a back button
         updateInterface();
@@ -55,7 +59,7 @@ public class OngoingClassActivity extends AppCompatActivity {
         defaultInstance = new WeakReference<>(instance);
     }
 
-    protected void notifyStudentsChanged() {
+    public void notifyStudentsChanged() {
         updateInterface();
     }
 
@@ -63,10 +67,10 @@ public class OngoingClassActivity extends AppCompatActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ListView listView = (ListView) findViewById(R.id.contact_view);
+                ListView listView = (ListView) findViewById(R.id.present_students_list);
                 updateHypeInstancesLabel(listView.getAdapter().getCount());
 
-                ((ContactViewAdapter)listView.getAdapter()).notifyDataSetChanged();
+                ((PresentStudentAdapter)listView.getAdapter()).notifyDataSetChanged();
             }
         });
     }

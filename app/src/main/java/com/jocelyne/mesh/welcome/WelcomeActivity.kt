@@ -8,7 +8,7 @@ import com.jocelyne.mesh.R
 import com.jocelyne.mesh.instructor.main.InstructorMainActivity
 import com.jocelyne.mesh.login.LoginActivity
 import com.jocelyne.mesh.session.SessionManager
-import com.jocelyne.mesh.student.StudentMainActivity
+import com.jocelyne.mesh.student.main.StudentMainActivity
 
 class WelcomeActivity : AppCompatActivity() {
 

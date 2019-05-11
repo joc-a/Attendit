@@ -2,7 +2,6 @@ package com.jocelyne.mesh.instructor.hype;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.util.Log;
 
 import com.hypelabs.hype.Error;
@@ -20,17 +19,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class MyApplication extends Application implements StateObserver, NetworkObserver, MessageObserver {
+public class InstructorHypeManager implements StateObserver, NetworkObserver, MessageObserver {
 
-    private static final String TAG = MyApplication.class.getName();
+    private static final String TAG = InstructorHypeManager.class.getName();
     public static String announcement = android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL;
 
-    // predefined hashset of student IDs of type Long because Instance user identifier is of type Long
-    private HashSet<Long> hashSet;
-
-    private Map<Long, Student> presentStudentsMap;
     private boolean isConfigured = false;
     private Activity activity;
+
+    /*
+    Instructor variables
+     */
+    private HashSet<Long> hashSet; // predefined hashset of student IDs of type Long because Instance user identifier is of type Long
+    private Map<Long, Student> presentStudentsMap;
 
     public void setActivity(Activity activity) {
         this.activity = activity;
@@ -44,7 +45,7 @@ public class MyApplication extends Application implements StateObserver, Network
         // The application context is used to query the user for permissions, such as using
         // the Bluetooth adapter or enabling Wi-Fi. The context must be set before anything
         // else is attempted, otherwise resulting in an exception being thrown.
-        Hype.setContext(getApplicationContext());
+        Hype.setContext(activity.getApplicationContext());
 
         // Adding itself as an Hype state observer makes sure that the application gets
         // notifications for lifecycle events being triggered by the Hype SDK. These

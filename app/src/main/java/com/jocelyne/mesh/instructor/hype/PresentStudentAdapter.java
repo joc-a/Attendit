@@ -49,7 +49,7 @@ public class PresentStudentAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return getPresentStudents().keySet().toArray()[position];
+        return getPresentStudents().values().toArray()[position];
     }
 
     @Override
