@@ -13,8 +13,7 @@ import com.hypelabs.hype.MessageInfo;
 import com.hypelabs.hype.MessageObserver;
 import com.hypelabs.hype.NetworkObserver;
 import com.hypelabs.hype.StateObserver;
-import com.jocelyne.mesh.instructor.hype.InstructorApplication;
-import com.jocelyne.mesh.instructor.hype.OngoingClassActivity;
+import com.jocelyne.mesh.instructor.dashboard.DashboardFragment;
 import com.jocelyne.mesh.session.SessionManager;
 import com.jocelyne.mesh.session.Student;
 import com.jocelyne.mesh.student.main.StudentMainActivity;
@@ -93,8 +92,8 @@ public class MyApplication extends Application implements StateObserver, Network
                 e.printStackTrace();
             }
 
-            OngoingClassActivity ongoingClassActivity = OngoingClassActivity.getDefaultInstance();
-            ongoingClassActivity.requestPermissions(ongoingClassActivity);
+            DashboardFragment ongoingClassActivity = DashboardFragment.getDefaultInstance();
+            ongoingClassActivity.requestPermissions();
         } else {
             int studentID = sessionManager.getStudentId();
             Hype.setUserIdentifier(studentID);
@@ -302,7 +301,7 @@ public class MyApplication extends Application implements StateObserver, Network
             // TODO send student info later after resolving
 
             // Notify the contact activity to refresh the UI
-            OngoingClassActivity ongoingClassActivity = OngoingClassActivity.getDefaultInstance();
+            DashboardFragment ongoingClassActivity = DashboardFragment.getDefaultInstance();
 
             if (ongoingClassActivity != null) {
                 ongoingClassActivity.notifyStudentsChanged();
@@ -326,7 +325,7 @@ public class MyApplication extends Application implements StateObserver, Network
             getPresentStudentsMap().remove(instance.getUserIdentifier());
 
             // Notify the contact activity to refresh the UI
-            OngoingClassActivity ongoingClassActivity = OngoingClassActivity.getDefaultInstance();
+            DashboardFragment ongoingClassActivity = DashboardFragment.getDefaultInstance();
 
             if (ongoingClassActivity != null) {
                 ongoingClassActivity.notifyStudentsChanged();

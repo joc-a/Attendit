@@ -57,7 +57,7 @@ class InstructorMainActivity : AppCompatActivity(),
     }
 
     private fun showConnect() {
-        connectFragment = DashboardFragment.newInstance("", "")
+        connectFragment = DashboardFragment.newInstance()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, connectFragment)
                 .addToBackStack(null)
