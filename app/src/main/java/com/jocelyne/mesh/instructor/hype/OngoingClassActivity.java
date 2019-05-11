@@ -33,9 +33,6 @@ public class OngoingClassActivity extends AppCompatActivity {
         listView.setAdapter(new PresentStudentAdapter(this, myApplication.getPresentStudentsMap()));
 
         setOngoingClassActivity(this);
-
-        TextView announcementView = findViewById(R.id.hype_announcement);
-        announcementView.setText("Device: " + MyApplication.announcement);
     }
 
 

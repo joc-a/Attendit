@@ -10,13 +10,11 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.jocelyne.mesh.R
 import com.jocelyne.mesh.instructor.classes.create.CreateClassActivity
-import com.jocelyne.mesh.instructor.classes.create.CreateClassEvent
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 
 /**
@@ -59,26 +57,45 @@ class ClassesFragment : Fragment() {
 
             currentUserID = FirebaseAuth.getInstance().currentUser?.uid!!
 
-            val query = FirebaseFirestore.getInstance()
+//            val query = FirebaseFirestore.getInstance()
+//                    .collection("INSTRUCTORS")
+//                    .document(currentUserID)
+//                    .collection("MY_CLASSES")
+//
+//            query.get().addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    Log.d(TAG, "my classes retrieved successfully")
+//                    val list = ArrayList<Class>()
+//                    for (document in task.result!!) {
+//                        val classItem = document.toObject(Class::class.java!!)
+//                        list.add(classItem)
+//                    }
+//                    classAdapter = ClassAdapter(list, listener)
+//                    view.adapter = classAdapter
+//                } else {
+//                    Log.w(TAG, "failed to retrieve my classes", task.exception)
+//                }
+//            }
+
+            val docRef = FirebaseFirestore.getInstance()
                     .collection("INSTRUCTORS")
                     .document(currentUserID)
                     .collection("MY_CLASSES")
-
-            query.get().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "my classes retrieved successfully")
-                    val list = ArrayList<Class>()
-                    for (document in task.result!!) {
-                        val classItem = document.toObject(Class::class.java!!)
-                        list.add(classItem)
-                    }
-                    classAdapter = ClassAdapter(list, listener)
-                    view.adapter = classAdapter
-                } else {
-                    Log.w(TAG, "failed to retrieve my classes", task.exception)
+            docRef.addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                if (e != null) {
+                    Log.w(TAG, "Classes listen failed.", e)
+                    return@EventListener
                 }
-            }
 
+                val list = ArrayList<Class>()
+                for (doc in value!!) {
+                    val classItem = doc.toObject(Class::class.java!!)
+                    list.add(classItem)
+                }
+                classAdapter = ClassAdapter(list, listener)
+                view.adapter = classAdapter
+                Log.d(TAG, "my classes retrieved successfully")
+            })
         }
         return view
     }
@@ -100,23 +117,8 @@ class ClassesFragment : Fragment() {
         startActivity(i)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onCreateClassEvent(event: CreateClassEvent) {
-        classAdapter.notifyDataSetChanged()
-    }
-
     override fun onResume() {
         super.onResume()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
     }
 
     override fun onAttach(context: Context) {

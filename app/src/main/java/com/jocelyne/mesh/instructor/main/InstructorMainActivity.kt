@@ -17,6 +17,9 @@ import kotlinx.android.synthetic.main.activity_instructor_main.*
 class InstructorMainActivity : AppCompatActivity(),
         ClassesFragment.OnClassesFragmentInteractionListener, DashboardFragment.OnDashboardFragmentInteractionListener {
 
+    private lateinit var classesFragment: ClassesFragment
+    private lateinit var connectFragment: DashboardFragment
+
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_classes -> {
@@ -45,20 +48,20 @@ class InstructorMainActivity : AppCompatActivity(),
     }
 
     private fun showClasses() {
-        val classesFragment = ClassesFragment.newInstance(1)
-        openFragment(classesFragment)
+        classesFragment = ClassesFragment.newInstance(1)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.hide(connectFragment)
+                .add(R.id.fragment_container, classesFragment)
+                .addToBackStack(null)
+                .commit()
     }
 
     private fun showConnect() {
-        val connectFragment = DashboardFragment.newInstance("", "")
-        openFragment(connectFragment)
-    }
-
-    private fun openFragment(fragment: Fragment) {
+        connectFragment = DashboardFragment.newInstance("", "")
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        transaction.replace(R.id.fragment_container, connectFragment)
+                .addToBackStack(null)
+                .commit()
     }
 
     override fun onClassesFragmentInteraction(item: Class?) {

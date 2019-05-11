@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.jocelyne.mesh.R;
 import com.jocelyne.mesh.session.Student;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -65,17 +64,10 @@ public class PresentStudentAdapter extends BaseAdapter {
             vi = getInflater().inflate(R.layout.present_student_cell_view, null);
 
         TextView presentStudentID = (TextView)vi.findViewById(R.id.present_student_id);
-        TextView announcement = (TextView)vi.findViewById(R.id.hype_announcement);
 
         Student presentStudent = (Student) getItem(position);
 
         presentStudentID.setText(String.format(Locale.US,"%d", presentStudent.getInstance().getUserIdentifier()));
-
-        try {
-            announcement.setText(new String(presentStudent.getInstance().getAnnouncement(), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            announcement.setText("");
-        }
 
         return vi;
     }

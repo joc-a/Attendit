@@ -16,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.jocelyne.mesh.R
 import com.jocelyne.mesh.instructor.classes.Class
 import kotlinx.android.synthetic.main.activity_create_class.*
-import org.greenrobot.eventbus.EventBus
 
 
 class CreateClassActivity : AppCompatActivity() {
@@ -175,7 +174,6 @@ class CreateClassActivity : AppCompatActivity() {
                     showProgress(false)
                     if (task.isSuccessful) {
                         Log.d(TAG, "new class successfully created with ID: " + new_class.CRN)
-                        EventBus.getDefault().postSticky(CreateClassEvent())
                         Toast.makeText(this@CreateClassActivity, "Class added.",
                                 Toast.LENGTH_SHORT).show()
                         onBackPressed()
