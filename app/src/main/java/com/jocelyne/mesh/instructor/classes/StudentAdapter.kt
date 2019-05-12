@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.jocelyne.mesh.R
-import com.jocelyne.mesh.session.Student
+import com.jocelyne.mesh.session_management.Student
 import kotlinx.android.synthetic.main.activity_sign_up.view.*
 import kotlinx.android.synthetic.main.item_student.view.*
 

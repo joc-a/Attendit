@@ -54,7 +54,7 @@ class ClassesFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
             }
-
+            view.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.class_items_margin).toInt()))
             currentUserID = FirebaseAuth.getInstance().currentUser?.uid!!
 
 //            val query = FirebaseFirestore.getInstance()

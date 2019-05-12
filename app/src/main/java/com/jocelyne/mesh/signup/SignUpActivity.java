@@ -30,10 +30,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jocelyne.mesh.R;
 import com.jocelyne.mesh.instructor.main.InstructorMainActivity;
-import com.jocelyne.mesh.session.Instructor;
-import com.jocelyne.mesh.session.SessionManager;
-import com.jocelyne.mesh.session.Student;
-import com.jocelyne.mesh.session.User;
+import com.jocelyne.mesh.session_management.Instructor;
+import com.jocelyne.mesh.session_management.SessionManager;
+import com.jocelyne.mesh.session_management.Student;
+import com.jocelyne.mesh.session_management.User;
 import com.jocelyne.mesh.student.main.StudentMainActivity;
 
 public class SignUpActivity extends AppCompatActivity {

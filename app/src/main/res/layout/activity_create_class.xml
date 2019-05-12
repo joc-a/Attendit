@@ -128,6 +128,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Days of the week"/>
+
+            <ca.antonious.materialdaypicker.MaterialDayPicker
+                android:id="@+id/weekdays_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Start time"/>
 
             <TimePicker
@@ -150,23 +165,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="16dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Days of the week"/>
-
-            <com.dpro.widgets.WeekdaysPicker
-                android:id="@+id/weekdays_picker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:sunday_first_day="false"
-                app:enabled="true"
-                app:weekenddarker="true"/>
 
         </LinearLayout>
 

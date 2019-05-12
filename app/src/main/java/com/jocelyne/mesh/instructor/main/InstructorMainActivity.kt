@@ -4,21 +4,20 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.jocelyne.mesh.R
 import com.jocelyne.mesh.instructor.hype.OngoingClassActivity
 import com.jocelyne.mesh.instructor.classes.Class
 import com.jocelyne.mesh.instructor.classes.ClassActivity
 import com.jocelyne.mesh.instructor.classes.ClassesFragment
-import com.jocelyne.mesh.instructor.dashboard.DashboardFragment
+import com.jocelyne.mesh.instructor.session.SessionFragment
 import kotlinx.android.synthetic.main.activity_instructor_main.*
 
 class InstructorMainActivity : AppCompatActivity(),
-        ClassesFragment.OnClassesFragmentInteractionListener, DashboardFragment.OnDashboardFragmentInteractionListener {
+        ClassesFragment.OnClassesFragmentInteractionListener, SessionFragment.OnSessionFragmentInteractionListener {
 
     private lateinit var classesFragment: ClassesFragment
-    private lateinit var connectFragment: DashboardFragment
+    private lateinit var connectFragment: SessionFragment
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -29,7 +28,7 @@ class InstructorMainActivity : AppCompatActivity(),
             }
             R.id.navigation_dashboard -> {
                 showConnect()
-                supportActionBar?.title = "Dashboard"
+                supportActionBar?.title = "Session"
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -57,7 +56,7 @@ class InstructorMainActivity : AppCompatActivity(),
     }
 
     private fun showConnect() {
-        connectFragment = DashboardFragment.newInstance()
+        connectFragment = SessionFragment.newInstance()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, connectFragment)
                 .addToBackStack(null)
@@ -71,7 +70,7 @@ class InstructorMainActivity : AppCompatActivity(),
         startActivity(intent)
     }
 
-    override fun onDashboardFragmentInteraction(uri: Uri) {
+    override fun onSessionFragmentInteraction(uri: Uri) {
         val intent = Intent(this, OngoingClassActivity::class.java)
         startActivity(intent)
     }

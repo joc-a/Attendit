@@ -13,9 +13,7 @@ import android.widget.TextView;
 
 import com.jocelyne.mesh.MyApplication;
 import com.jocelyne.mesh.R;
-import com.jocelyne.mesh.instructor.hype.InstructorApplication;
-import com.jocelyne.mesh.session.SessionManager;
-import com.jocelyne.mesh.student.hype.StudentApplication;
+import com.jocelyne.mesh.session_management.SessionManager;
 
 import java.lang.ref.WeakReference;
 

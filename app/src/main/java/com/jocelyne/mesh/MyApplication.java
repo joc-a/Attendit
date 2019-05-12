@@ -14,9 +14,9 @@ import com.hypelabs.hype.MessageObserver;
 import com.hypelabs.hype.NetworkObserver;
 import com.hypelabs.hype.StateObserver;
 import com.jocelyne.mesh.instructor.classes.Class;
-import com.jocelyne.mesh.instructor.dashboard.DashboardFragment;
-import com.jocelyne.mesh.session.SessionManager;
-import com.jocelyne.mesh.session.Student;
+import com.jocelyne.mesh.instructor.session.SessionFragment;
+import com.jocelyne.mesh.session_management.SessionManager;
+import com.jocelyne.mesh.session_management.Student;
 import com.jocelyne.mesh.student.main.StudentMainActivity;
 
 import java.io.UnsupportedEncodingException;
@@ -100,8 +100,8 @@ public class MyApplication extends Application implements StateObserver, Network
                 e.printStackTrace();
             }
 
-            DashboardFragment ongoingClassActivity = DashboardFragment.getDefaultInstance();
-            ongoingClassActivity.requestPermissions();
+            SessionFragment sessionFragment = SessionFragment.getDefaultInstance();
+            sessionFragment.requestPermissions();
         } else {
             int studentID = sessionManager.getStudentId();
             Hype.setUserIdentifier(studentID);
@@ -303,10 +303,10 @@ public class MyApplication extends Application implements StateObserver, Network
             // TODO send student info later after resolving
 
             // Notify the contact activity to refresh the UI
-            DashboardFragment ongoingClassActivity = DashboardFragment.getDefaultInstance();
+            SessionFragment sessionFragment = SessionFragment.getDefaultInstance();
 
-            if (ongoingClassActivity != null) {
-                ongoingClassActivity.notifyStudentsChanged();
+            if (sessionFragment != null) {
+                sessionFragment.notifyStudentsChanged();
 
                 // Send confirmation to student
                 String classNameToSend = selectedClass.prefix + " " + selectedClass.number + ": " + selectedClass.name;
@@ -339,13 +339,13 @@ public class MyApplication extends Application implements StateObserver, Network
         // Cleaning up is always a good idea. It's not possible to communicate with instances
         // that were previously lost.
         if (isInstructor) {
-            getPresentStudentsMap().remove(instance.getUserIdentifier() + "");
+            getPresentStudentsMap().get(instance.getUserIdentifier() + "").lost = true;
 
             // Notify the contact activity to refresh the UI
-            DashboardFragment ongoingClassActivity = DashboardFragment.getDefaultInstance();
+            SessionFragment sessionFragment = SessionFragment.getDefaultInstance();
 
-            if (ongoingClassActivity != null) {
-                ongoingClassActivity.notifyStudentsChanged();
+            if (sessionFragment != null) {
+                sessionFragment.notifyStudentsChanged();
             }
         } else {
             ongoingClassInstance = null;

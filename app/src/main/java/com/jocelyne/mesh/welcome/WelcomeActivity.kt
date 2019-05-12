@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import com.jocelyne.mesh.R
 import com.jocelyne.mesh.instructor.main.InstructorMainActivity
 import com.jocelyne.mesh.login.LoginActivity
-import com.jocelyne.mesh.session.SessionManager
+import com.jocelyne.mesh.session_management.SessionManager
 import com.jocelyne.mesh.student.main.StudentMainActivity
 
 class WelcomeActivity : AppCompatActivity() {

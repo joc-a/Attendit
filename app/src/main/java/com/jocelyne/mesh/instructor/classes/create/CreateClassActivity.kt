@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jocelyne.mesh.R
@@ -83,14 +84,19 @@ class CreateClassActivity : AppCompatActivity() {
             }
             hour.toString() + ":" + (if (minute == 0) "00" else minute.toString()) + " " + ending
         }
-        val daysOfTheWeek = weekdaysInitials(weekdays_picker.selectedDaysText)
+
+        val dayslist = weekdays_picker.selectedDays
+        val daysOfTheWeek = weekdaysInitials(dayslist)
 
         var cancel = false
         var focusView: View? = null
 
-        if (weekdays_picker.noDaySelected()) {
+        if (daysOfTheWeek.isEmpty()) {
             focusView = weekdays_picker
             cancel = true
+            Toast.makeText(this, "Please pick the weekdays.", Toast.LENGTH_SHORT).show()
+        } else {
+
         }
 
         if (TextUtils.isEmpty(crn)) {
@@ -126,14 +132,17 @@ class CreateClassActivity : AppCompatActivity() {
         }
     }
 
-    private fun weekdaysInitials(selectedDaysText: List<String>): String {
+    private fun weekdaysInitials(selectedDaysText: List<MaterialDayPicker.Weekday>): String {
         var res = ""
-        for (day: String in selectedDaysText) {
-            when {
-                day.equals("thursday", true) -> res += "R"
-                day.equals("saturday", true) -> res += "Sat"
-                day.equals("sunday", true) -> res += "Sun"
-                else -> res += day[0]
+        for (day: MaterialDayPicker.Weekday in selectedDaysText) {
+            res += when (day) {
+                MaterialDayPicker.Weekday.MONDAY -> "M"
+                MaterialDayPicker.Weekday.TUESDAY -> "T"
+                MaterialDayPicker.Weekday.WEDNESDAY -> "W"
+                MaterialDayPicker.Weekday.THURSDAY -> "R"
+                MaterialDayPicker.Weekday.FRIDAY -> "F"
+                MaterialDayPicker.Weekday.SATURDAY -> "Sat"
+                MaterialDayPicker.Weekday.SUNDAY -> "Sun"
             }
         }
         return res

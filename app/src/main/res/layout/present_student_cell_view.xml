@@ -1,46 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/present_student_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:text="201504851"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_avatar"
-            android:id="@+id/avatar"/>
+    <ImageView
+        android:id="@+id/student_status"
+        android:layout_width="wrap_content"
+        android:layout_height="20dip"
+        android:layout_weight="0.1"
+        android:layout_gravity="center_vertical"
+        app:srcCompat="@drawable/ic_green_circle_24dp"/>
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dip"
-            android:layout_weight="0.9">
-
-            <TextView
-                android:id="@+id/hype_announcement"
-                android:layout_width="wrap_content"
-                android:textStyle="bold"
-                android:layout_height="wrap_content"
-                android:text="Announcement: ---"/>
-
-            <TextView
-                android:id="@+id/present_student_id"
-                android:layout_width="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Small"
-                android:layout_height="wrap_content"/>
-
-        </TableLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="20dip"
-            android:src="@mipmap/ic_newcontent"
-            android:id="@+id/new_content"
-            android:layout_weight="0.1"/>
-
-    </TableRow>
-
-</TableLayout>
+</LinearLayout>

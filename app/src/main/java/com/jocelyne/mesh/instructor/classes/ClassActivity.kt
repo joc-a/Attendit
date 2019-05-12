@@ -10,7 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jocelyne.mesh.R
-import com.jocelyne.mesh.session.Student
+import com.jocelyne.mesh.session_management.Student
 import kotlinx.android.synthetic.main.activity_class.*
 
 
@@ -75,6 +75,7 @@ class ClassActivity : AppCompatActivity() {
     private fun displayStudents() {
         if (myClass!!.studentsMap != null) {
             studentsMap = myClass!!.studentsMap
+            studentsList = ArrayList()
             studentsMap.forEach { (key, value) -> studentsList.add(value) }
             studentAdapter = StudentAdapter(studentsList)
             recyclerView.adapter = studentAdapter

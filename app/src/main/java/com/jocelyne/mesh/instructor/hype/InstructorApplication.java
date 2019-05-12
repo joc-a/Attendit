@@ -13,8 +13,7 @@ import com.hypelabs.hype.MessageInfo;
 import com.hypelabs.hype.MessageObserver;
 import com.hypelabs.hype.NetworkObserver;
 import com.hypelabs.hype.StateObserver;
-import com.jocelyne.mesh.MyApplication;
-import com.jocelyne.mesh.session.Student;
+import com.jocelyne.mesh.session_management.Student;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;

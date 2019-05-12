@@ -5,10 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jocelyne.mesh.R;
-import com.jocelyne.mesh.session.Student;
+import com.jocelyne.mesh.session_management.Student;
 
 import java.util.Locale;
 import java.util.Map;
@@ -68,6 +69,13 @@ public class PresentStudentAdapter extends BaseAdapter {
         Student presentStudent = (Student) getItem(position);
 
         presentStudentID.setText(String.format(Locale.US,"%d", presentStudent.getInstance().getUserIdentifier()));
+
+        ImageView statusImageView = vi.findViewById(R.id.student_status);
+        if (presentStudent.lost) {
+            statusImageView.setImageResource(R.drawable.ic_red_circle_24dp);
+        } else {
+            statusImageView.setImageResource(R.drawable.ic_green_circle_24dp);
+        }
 
         return vi;
     }

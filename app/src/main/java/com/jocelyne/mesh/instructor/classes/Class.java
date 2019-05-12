@@ -1,6 +1,6 @@
 package com.jocelyne.mesh.instructor.classes;
 
-import com.jocelyne.mesh.session.Student;
+import com.jocelyne.mesh.session_management.Student;
 
 import java.util.HashMap;
 import java.util.Map;
