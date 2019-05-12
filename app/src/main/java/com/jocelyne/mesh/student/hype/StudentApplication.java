@@ -200,12 +200,12 @@ public class StudentApplication extends Application implements StateObserver, Ne
         // are useful for keeping track of which instances are ready to communicate.
         ongoingClassInstance = instance;
 
-        // Notify the student activity to change the UI
-        StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
-
-        if (studentMainActivity != null) {
-            studentMainActivity.confirmCheckIn();
-        }
+//        // Notify the student activity to change the UI
+//        StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
+//
+//        if (studentMainActivity != null) {
+//            studentMainActivity.confirmCheckIn();
+//        }
     }
 
     public void removeFromResolvedInstancesMap(Instance instance) {

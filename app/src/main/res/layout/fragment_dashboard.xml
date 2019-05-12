@@ -29,12 +29,12 @@
         android:prompt="@string/pick_a_class"/>
 
     <Button
-        android:id="@+id/control_btn"
+        android:id="@+id/start_session_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAllCaps="false"
-        android:text="@string/start_class"/>
+        android:text="@string/start_session"/>
 
     <LinearLayout
         android:id="@+id/ongoing_class_layout"
@@ -42,6 +42,28 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:text="@string/cancel"/>
+
+            <Button
+                android:id="@+id/save_session_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:text="@string/save_session"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/hype_instances_label"

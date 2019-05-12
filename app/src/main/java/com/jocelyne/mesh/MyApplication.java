@@ -13,6 +13,7 @@ import com.hypelabs.hype.MessageInfo;
 import com.hypelabs.hype.MessageObserver;
 import com.hypelabs.hype.NetworkObserver;
 import com.hypelabs.hype.StateObserver;
+import com.jocelyne.mesh.instructor.classes.Class;
 import com.jocelyne.mesh.instructor.dashboard.DashboardFragment;
 import com.jocelyne.mesh.session.SessionManager;
 import com.jocelyne.mesh.session.Student;
@@ -20,7 +21,6 @@ import com.jocelyne.mesh.student.main.StudentMainActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class MyApplication extends Application implements StateObserver, NetworkObserver, MessageObserver {
@@ -36,8 +36,10 @@ public class MyApplication extends Application implements StateObserver, Network
     /*
     Instructor variables
      */
-    private HashSet<Long> hashSet; // predefined hashset of student IDs of type Long because Instance user identifier is of type Long
-    private Map<Long, Student> presentStudentsMap;
+   // predefined map of student IDs
+    private Class selectedClass;
+    private Map<String, Student> registeredStudentsMap;
+    private Map<String, Student> presentStudentsMap;
 
     /*
     Student variables
@@ -48,10 +50,16 @@ public class MyApplication extends Application implements StateObserver, Network
         this.activity = activity;
         sessionManager = new SessionManager(getApplicationContext());
         isInstructor = sessionManager.isInstructor();
-        if (isInstructor) {
-            hashSet = new HashSet<>();
-            hashSet.add(201604514L);
-        }
+    }
+
+    public void setRegisteredStudentsMap(Map<String, Student> map) {
+        registeredStudentsMap = map;
+        registeredStudentsMap = new HashMap<>();
+        registeredStudentsMap.put("201604514", null);
+    }
+
+    public void setSelectedClass(Class selectedClass) {
+        this.selectedClass = selectedClass;
     }
 
     public void configureHype() {
@@ -126,7 +134,7 @@ public class MyApplication extends Application implements StateObserver, Network
         Hype.start();
     }
 
-    protected void requestHypeToStop() {
+    public void requestHypeToStop() {
 
         // The current release has a known issue with Bluetooth Low Energy that causes all
         // connections to drop when the SDK is stopped. This is an Android issue.
@@ -162,7 +170,7 @@ public class MyApplication extends Application implements StateObserver, Network
             @Override
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle("Hype failed starting");
+                builder.setTitle("Something went wrong. Please try again.");
                 builder.setMessage(failedMsg);
                 builder.setPositiveButton(android.R.string.ok, null);
                 builder.show();
@@ -194,8 +202,8 @@ public class MyApplication extends Application implements StateObserver, Network
     {
         // This method can be used to decide whether an instance is interesting
         if (isInstructor) {
-            // Resolve instance only if the student ID is in predefined hashset of IDs (only if student is registered in class)
-            return hashSet.contains(instance.getUserIdentifier()) && !presentStudentsMap.containsKey(instance.getUserIdentifier());
+            // Resolve instance only if the student ID is in predefined map of IDs (only if student is registered in class)
+            return registeredStudentsMap.containsKey(instance.getUserIdentifier() + "");
         } else {
             return true;
         }
@@ -208,12 +216,6 @@ public class MyApplication extends Application implements StateObserver, Network
                     instance.getStringIdentifier(), instance.getUserIdentifier()));
 
             if(shouldResolveInstance(instance)){
-                try {
-                    Hype.setAnnouncement("Check-in successful!".getBytes("UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    Hype.setAnnouncement(null);
-                    e.printStackTrace();
-                }
                 Hype.resolve(instance);
             } else {
                 try {
@@ -284,7 +286,7 @@ public class MyApplication extends Application implements StateObserver, Network
         }
     }
 
-    public Map<Long, Student> getPresentStudentsMap() {
+    public Map<String, Student> getPresentStudentsMap() {
         if (presentStudentsMap == null) {
             presentStudentsMap = new HashMap<>();
         }
@@ -297,7 +299,7 @@ public class MyApplication extends Application implements StateObserver, Network
         if (isInstructor) {
             Student foundStudent = new Student();
             foundStudent.setInstance(instance);
-            getPresentStudentsMap().put(instance.getUserIdentifier(), foundStudent);
+            getPresentStudentsMap().put(instance.getUserIdentifier() + "", foundStudent);
             // TODO send student info later after resolving
 
             // Notify the contact activity to refresh the UI
@@ -305,16 +307,31 @@ public class MyApplication extends Application implements StateObserver, Network
 
             if (ongoingClassActivity != null) {
                 ongoingClassActivity.notifyStudentsChanged();
+
+                // Send confirmation to student
+                String classNameToSend = selectedClass.prefix + " " + selectedClass.number + ": " + selectedClass.name;
+                try {
+                    Message message = sendMessage(classNameToSend, instance);
+                    if (message != null) {
+                        Log.i(TAG, String.format("Hype could not send confirmation message to student: %s",
+                                instance.getUserIdentifier()));
+                    } else {
+                        Log.i(TAG, String.format("Hype sent confirmation message to student: %s",
+                                instance.getUserIdentifier()));
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             ongoingClassInstance = instance;
 
-            // Notify the student activity to change the UI
-            StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
-
-            if (studentMainActivity != null) {
-                studentMainActivity.confirmCheckIn();
-            }
+//            // Notify the student activity to change the UI
+//            StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
+//
+//            if (studentMainActivity != null) {
+//                studentMainActivity.confirmCheckIn();
+//            }
         }
     }
 
@@ -322,7 +339,7 @@ public class MyApplication extends Application implements StateObserver, Network
         // Cleaning up is always a good idea. It's not possible to communicate with instances
         // that were previously lost.
         if (isInstructor) {
-            getPresentStudentsMap().remove(instance.getUserIdentifier());
+            getPresentStudentsMap().remove(instance.getUserIdentifier() + "");
 
             // Notify the contact activity to refresh the UI
             DashboardFragment ongoingClassActivity = DashboardFragment.getDefaultInstance();
@@ -344,7 +361,25 @@ public class MyApplication extends Application implements StateObserver, Network
 
     @Override
     public void onHypeMessageReceived(Message message, Instance instance) {
+        if (isInstructor) {
+            Log.i(TAG, String.format("Hype got a message from student: %s", instance.getUserIdentifier()));
+        } else {
+            Log.i(TAG, String.format("Hype got a message from instructor: %s", instance.getStringIdentifier()));
 
+            // Update the UI for student activity
+            final StudentMainActivity studentMainActivity = StudentMainActivity.getDefaultInstance();
+
+            if (studentMainActivity != null) {
+                final String className = new String(message.getData());
+                this.activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        studentMainActivity.confirmCheckIn(className);
+                    }
+                });
+
+            }
+        }
     }
 
     @Override
@@ -360,5 +395,20 @@ public class MyApplication extends Application implements StateObserver, Network
     @Override
     public void onHypeMessageDelivered(MessageInfo messageInfo, Instance instance, float v, boolean b) {
 
+    }
+
+    protected Message sendMessage(String text, Instance instance) throws UnsupportedEncodingException {
+
+        // When sending content there must be some sort of protocol that both parties
+        // understand. In this case, we simply send the text encoded in UTF-8. The data
+        // must be decoded when received, using the same encoding.
+        byte[] data = text.getBytes("UTF-8");
+
+        // Sends the data and returns the message that has been generated for it. Messages have
+        // identifiers that are useful for keeping track of the message's deliverability state.
+        // In order to track message delivery set the last parameter to true. Notice that this
+        // is not recommend, as it incurs extra overhead on the network. Use this feature only
+        // if progress tracking is really necessary.
+        return Hype.send(data, instance, false);
     }
 }

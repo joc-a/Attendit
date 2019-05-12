@@ -15,12 +15,12 @@ import java.util.Map;
 
 public class PresentStudentAdapter extends BaseAdapter {
 
-    private Map<Long, Student> mPresentStudents;
+    private Map<String, Student> mPresentStudents;
 
     private Context context;
     private LayoutInflater inflater = null;
 
-    public PresentStudentAdapter(Context context, Map<Long, Student> mPresentStudents) {
+    public PresentStudentAdapter(Context context, Map<String, Student> mPresentStudents) {
         this.context = context;
         this.mPresentStudents = mPresentStudents;
     }
@@ -37,7 +37,7 @@ public class PresentStudentAdapter extends BaseAdapter {
         return context;
     }
 
-    protected Map<Long, Student> getPresentStudents() {
+    protected Map<String, Student> getPresentStudents() {
         return mPresentStudents;
     }
 

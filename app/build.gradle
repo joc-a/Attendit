@@ -32,16 +32,18 @@ dependencies {
     androidTestImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation project(':Hype')
-    implementation 'com.google.firebase:firebase-appindexing:17.1.0'
+    implementation 'com.google.firebase:firebase-appindexing:18.0.0'
 
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.google.firebase:firebase-firestore:18.2.0'
-    implementation 'com.google.firebase:firebase-auth:16.2.1'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-firestore:19.0.0'
+    implementation 'com.google.firebase:firebase-auth:17.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.github.DavidProdinger:weekdays-selector:1.1.0'
 
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    implementation 'com.evrencoskun.library:tableview:0.8.8'
 }
 
 apply plugin: 'com.google.gms.google-services'

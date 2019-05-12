@@ -4,7 +4,6 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
@@ -38,18 +37,23 @@ import com.jocelyne.mesh.R;
 import com.jocelyne.mesh.instructor.classes.Class;
 import com.jocelyne.mesh.instructor.hype.PresentStudentAdapter;
 import com.jocelyne.mesh.session.SessionManager;
+import com.jocelyne.mesh.session.Student;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class DashboardFragment extends Fragment {
 
     private String TAG = "DashboardFragment";
+    private String KEY_ONGOING_CLASS = "ongoingClass";
 
     private String currentUserID;
     private ArrayList<Class> classList;
     private Class selectedClass;
+    private Map<String, Student> registeredStudentsMap;
     private ClassSpinnerAdapter classSpinnerAdapter;
+    private boolean ongoingClass;
 
     // Hype variables
     private static final int REQUEST_ACCESS_COARSE_LOCATION_ID = 0;
@@ -58,7 +62,7 @@ public class DashboardFragment extends Fragment {
     // UI components
     private TextView spinnerPromptTextView;
     private Spinner classesSpinner;
-    private Button controlBtn;
+    private Button startBtn;
     private View ongoingClassLayout;
     private ListView listView;
     private TextView hypeInstancesText;
@@ -75,10 +79,23 @@ public class DashboardFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnDashboardFragmentInteractionListener) {
+            mListener = (OnDashboardFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnDashboardFragmentInteractionListener");
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+
+        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     @Nullable
@@ -87,7 +104,12 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // restore state
+        if (savedInstanceState != null) {
+            ongoingClass = savedInstanceState.getBoolean(KEY_ONGOING_CLASS);
+        } else {
+            ongoingClass = false;
+        }
 
         return view;
     }
@@ -110,11 +132,27 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        controlBtn = view.findViewById(R.id.control_btn);
-        controlBtn.setOnClickListener(new View.OnClickListener() {
+        startBtn = view.findViewById(R.id.start_session_btn);
+        startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startClass();
+                startSession();
+            }
+        });
+
+        Button cancelBtn = view.findViewById(R.id.cancel_btn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelSession();
+            }
+        });
+
+        Button saveBtn = view.findViewById(R.id.save_session_btn);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveSession();
             }
         });
 
@@ -129,23 +167,79 @@ public class DashboardFragment extends Fragment {
         loadMyClasses(currentUserID);
 
         showProgress(false);
+
+        if (ongoingClass) {
+            showOngoingClassUI();
+        } else {
+            showNoClassUI();
+        }
     }
 
-    private void startClass() {
-        // hide UI components
-        spinnerPromptTextView.setVisibility(View.GONE);
-        classesSpinner.setVisibility(View.GONE);
-        controlBtn.setText(R.string.end_class);
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_ONGOING_CLASS, ongoingClass);
+    }
 
-        // show UI components
-        ongoingClassLayout.setVisibility(View.VISIBLE);
+    private void startSession() {
+        showOngoingClassUI();
+
+        // get students map of selected class
+        registeredStudentsMap = selectedClass.studentsMap;
 
         // Hype it up
         MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        myApplication.setRegisteredStudentsMap(registeredStudentsMap);
+        myApplication.setSelectedClass(selectedClass);
         listView.setAdapter(new PresentStudentAdapter(getActivity(), myApplication.getPresentStudentsMap()));
         myApplication.setActivity(getActivity());
         setDashboardFragment(this);
         myApplication.configureHype();
+
+        // for restoring fragment state after leaving it
+        ongoingClass = true;
+    }
+
+    private void cancelSession() {
+        showNoClassUI();
+
+        ongoingClass = false;
+
+        // clean up
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+    }
+
+    private void saveSession() {
+        showNoClassUI();
+
+        // Stop Hype
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        myApplication.requestHypeToStop();
+
+        ongoingClass = false;
+
+        // save session to db
+
+    }
+
+    private void showOngoingClassUI() {
+        // hide UI components
+        spinnerPromptTextView.setVisibility(View.GONE);
+        classesSpinner.setVisibility(View.GONE);
+        startBtn.setVisibility(View.GONE);
+
+        // show UI components
+        ongoingClassLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoClassUI() {
+        // show UI components
+        spinnerPromptTextView.setVisibility(View.VISIBLE);
+        classesSpinner.setVisibility(View.VISIBLE);
+        startBtn.setVisibility(View.VISIBLE);
+
+        // hide UI components
+        ongoingClassLayout.setVisibility(View.GONE);
     }
 
     public static DashboardFragment getDefaultInstance() {
@@ -256,12 +350,21 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        controlBtn.setVisibility(show ? View.GONE : View.VISIBLE);
-        controlBtn.animate().setDuration(shortAnimTime).alpha(
+        startBtn.setVisibility(show ? View.GONE : View.VISIBLE);
+        startBtn.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                controlBtn.setVisibility(show ? View.GONE : View.VISIBLE);
+                startBtn.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        ongoingClassLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        ongoingClassLayout.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ongoingClassLayout.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
 
@@ -287,17 +390,6 @@ public class DashboardFragment extends Fragment {
             SessionManager.Companion.getInstance(requireContext()).signOut();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnDashboardFragmentInteractionListener) {
-            mListener = (OnDashboardFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnDashboardFragmentInteractionListener");
-        }
     }
 
     @Override

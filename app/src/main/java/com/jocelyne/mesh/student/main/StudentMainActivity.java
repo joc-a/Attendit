@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.jocelyne.mesh.MyApplication;
@@ -24,7 +25,9 @@ public class StudentMainActivity extends AppCompatActivity {
     private static WeakReference<StudentMainActivity> defaultInstance;
 
     private Toolbar toolbar;
-    private TextView successTextView;
+    private View confirmationView;
+    private TextView classNameTextView;
+    private TextView absencesTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,9 @@ public class StudentMainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        successTextView = findViewById(R.id.success_message_tv);
+        confirmationView = findViewById(R.id.confirmation_layout);
+        classNameTextView = findViewById(R.id.class_name);
+        absencesTextView = findViewById(R.id.absences);
 
         final MyApplication myApplication = (MyApplication) getApplication();
         final StudentMainActivity studentMainActivity = this;
@@ -59,12 +64,12 @@ public class StudentMainActivity extends AppCompatActivity {
         defaultInstance = new WeakReference<>(instance);
     }
 
-    public void confirmCheckIn() {
-        successTextView.setText("Check-in successful!");
+    public void confirmCheckIn(String className) {
+        confirmationView.setVisibility(View.VISIBLE);
+        classNameTextView.setText(className);
     }
 
     public void notifyClassLost() {
-        successTextView.setText("Class was lost.");
     }
 
     public void requestPermissions(Activity activity) {

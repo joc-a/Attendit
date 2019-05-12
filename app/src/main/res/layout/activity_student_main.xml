@@ -13,11 +13,37 @@
         android:layout_height="wrap_content"
         app:title="Check in"/>
 
-    <TextView
-        android:id="@+id/success_message_tv"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/confirmation_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Success message"/>
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="4dp"
+        android:background="@drawable/background_student_confirmation"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/primaryText"
+            android:textSize="24dp"
+            android:text="Check-in successful"/>
+
+        <TextView
+            android:id="@+id/class_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="BIO 201: Intro to Biology"/>
+
+        <TextView
+            android:id="@+id/absences"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Absences: 2"/>
+
+    </LinearLayout>
 
 </LinearLayout>
