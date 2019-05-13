@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mesh</string>
+    <string name="app_name">Attendit</string>
 
     <!-- Sign Up/Login -->
     <string name="action_sign_up">Sign Up</string>
@@ -38,5 +38,6 @@
     <string name="start_session">Start session</string>
     <string name="save_session">Save session</string>
     <string name="cancel">Cancel</string>
+    <string name="settings">Settings</string>
 
 </resources>

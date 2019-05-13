@@ -2,17 +2,22 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#1d77f5</color>
+
+    <color name="bottom_nav_selected">#1a79ff</color>
+    <color name="InactiveBottomNavIconColor">#7C7C7C</color>
 
     <color name="primaryText">#000000</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="transparent">#00000000</color>
     <color name="red">#DD0C0C</color>
+    <color name="windowBackground">#f6fafd</color>
     <color name="white">#FFFFFF</color>
     <color name="add_class_bg">#f9fafc</color>
     <color name="light_grey">#F0F0F0</color>
     <color name="grey">#AFAFAF</color>
+    <color name="grey_overlay">#2DFFFFFF</color>
 
     <color name="edit_text_border">#C5C5C5</color>
 

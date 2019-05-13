@@ -11,6 +11,7 @@ import com.jocelyne.mesh.instructor.classes.Class
 import com.jocelyne.mesh.instructor.classes.ClassActivity
 import com.jocelyne.mesh.instructor.classes.ClassesFragment
 import com.jocelyne.mesh.instructor.session.SessionFragment
+import com.jocelyne.mesh.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_instructor_main.*
 
 class InstructorMainActivity : AppCompatActivity(),
@@ -26,7 +27,7 @@ class InstructorMainActivity : AppCompatActivity(),
                 supportActionBar?.title = "Classes"
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_session -> {
                 showConnect()
                 supportActionBar?.title = "Session"
                 return@OnNavigationItemSelectedListener true
@@ -43,7 +44,7 @@ class InstructorMainActivity : AppCompatActivity(),
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-        navView.selectedItemId = R.id.navigation_dashboard
+        navView.selectedItemId = R.id.navigation_session
     }
 
     private fun showClasses() {
@@ -77,6 +78,11 @@ class InstructorMainActivity : AppCompatActivity(),
 
     override fun startClass() {
         val intent = Intent(this, OngoingClassActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun openSettings() {
+        val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
 }

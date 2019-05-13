@@ -5,7 +5,7 @@
         android:color="@color/red"
         android:width="1dp"/>
     <corners
-        android:radius="5dp"/>
+        android:radius="20dp"/>
     <solid
-        android:color="@color/transparent"/>
+        android:color="@color/grey_overlay"/>
 </shape>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="8dp">
     
@@ -10,6 +10,8 @@
         android:id="@+id/class_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:textColor="@color/primaryText"
         android:textStyle="bold"
         android:text="Greek and Roman mythology"/>
@@ -18,6 +20,8 @@
         android:id="@+id/class_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/class_name"
         android:text="12:00 pm - 12:50 pm"/>
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

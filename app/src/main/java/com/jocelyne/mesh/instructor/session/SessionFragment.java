@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,9 +46,12 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class SessionFragment extends Fragment {
 
     private String TAG = "SessionFragment";
+    private String STATE_PREF = "statePref";
     private String KEY_ONGOING_CLASS = "ongoingClass";
 
     private String currentUserID;
@@ -54,6 +59,8 @@ public class SessionFragment extends Fragment {
     private Class selectedClass;
     private Map<String, Student> registeredStudentsMap;
     private ClassSpinnerAdapter classSpinnerAdapter;
+
+    private SharedPreferences pref;
     private boolean ongoingClass;
 
     // Hype variables
@@ -61,14 +68,27 @@ public class SessionFragment extends Fragment {
     private static WeakReference<SessionFragment> defaultInstance;
 
     // UI components
+    private TextView titleTextView;
+    private TextView descriptionTextView;
+    private GifImageView gifImageView;
     private TextView spinnerPromptTextView;
     private Spinner classesSpinner;
     private Button startBtn;
+    private Button cancelBtn;
+    private Button saveBtn;
     private View ongoingClassLayout;
+    private View getOngoingClassButtonsLayout;
     private ListView listView;
     private TextView hypeInstancesText;
     private ProgressBar progressBar;
     private VideoView mVideoView;
+    private TextView prefix;
+    private TextView number;
+    private TextView name;
+    private TextView daysOfTheWeek;
+    private TextView startTime;
+    private TextView endTime;
+    private TextView numStudents;
 
     private OnSessionFragmentInteractionListener mListener;
 
@@ -95,7 +115,7 @@ public class SessionFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
 
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
@@ -107,11 +127,8 @@ public class SessionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_session, container, false);
 
         // restore state
-        if (savedInstanceState != null) {
-            ongoingClass = savedInstanceState.getBoolean(KEY_ONGOING_CLASS);
-        } else {
-            ongoingClass = false;
-        }
+        pref = getActivity().getSharedPreferences(STATE_PREF, Context.MODE_PRIVATE);
+        ongoingClass = pref.getBoolean(KEY_ONGOING_CLASS, false);
 
         return view;
     }
@@ -134,6 +151,9 @@ public class SessionFragment extends Fragment {
 //            }
 //        });
 
+        titleTextView = view.findViewById(R.id.title);
+        descriptionTextView = view.findViewById(R.id.description);
+        gifImageView = view.findViewById(R.id.gif_view);
         spinnerPromptTextView = view.findViewById(R.id.class_spinner_prompt);
         classesSpinner = view.findViewById(R.id.classes_spinner);
         classesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -156,7 +176,7 @@ public class SessionFragment extends Fragment {
             }
         });
 
-        Button cancelBtn = view.findViewById(R.id.cancel_btn);
+        cancelBtn = view.findViewById(R.id.cancel_btn);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,7 +184,7 @@ public class SessionFragment extends Fragment {
             }
         });
 
-        Button saveBtn = view.findViewById(R.id.save_session_btn);
+        saveBtn = view.findViewById(R.id.save_session_btn);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,16 +193,21 @@ public class SessionFragment extends Fragment {
         });
 
         ongoingClassLayout = view.findViewById(R.id.ongoing_class_layout);
+        getOngoingClassButtonsLayout = view.findViewById(R.id.ongoing_class_buttons_layout);
         listView = view.findViewById(R.id.present_students_list);
-        hypeInstancesText = view.findViewById(R.id.hype_instances_label);
+        hypeInstancesText = view.findViewById(R.id.no_of_students);
         progressBar = view.findViewById(R.id.progress_bar);
 
-        showProgress(true);
+        prefix = view.findViewById(R.id.prefix_tv);
+        number = view.findViewById(R.id.number_tv);
+        name = view.findViewById(R.id.name_tv);
+        daysOfTheWeek = view.findViewById(R.id.days_of_the_week);
+        startTime = view.findViewById(R.id.start_time);
+        endTime = view.findViewById(R.id.end_time);
+        numStudents = view.findViewById(R.id.no_of_students);
 
         // load classes into spinner
         loadMyClasses(currentUserID);
-
-        showProgress(false);
 
         if (ongoingClass) {
             showOngoingClassUI();
@@ -191,14 +216,17 @@ public class SessionFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_ONGOING_CLASS, ongoingClass);
-    }
-
     private void startSession() {
         showOngoingClassUI();
+
+        if (selectedClass != null) {
+            prefix.setText(selectedClass.prefix);
+            number.setText(selectedClass.number);
+            name.setText(selectedClass.name);
+            daysOfTheWeek.setText(selectedClass.daysOfTheWeek);
+            startTime.setText(selectedClass.startTime);
+            endTime.setText(selectedClass.endTime);
+        }
 
         // get students map of selected class
         registeredStudentsMap = selectedClass.studentsMap;
@@ -214,48 +242,92 @@ public class SessionFragment extends Fragment {
 
         // for restoring fragment state after leaving it
         ongoingClass = true;
+        pref.edit().putBoolean(KEY_ONGOING_CLASS, ongoingClass).commit();
     }
 
     private void cancelSession() {
         showNoClassUI();
 
         ongoingClass = false;
-
-        // clean up
-        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        pref.edit().putBoolean(KEY_ONGOING_CLASS, ongoingClass).commit();
     }
 
     private void saveSession() {
         showNoClassUI();
 
-        // Stop Hype
-        MyApplication myApplication = (MyApplication) getActivity().getApplication();
-        myApplication.requestHypeToStop();
-
         ongoingClass = false;
+        pref.edit().putBoolean(KEY_ONGOING_CLASS, ongoingClass).commit();
 
         // save session to db
-
+        Toast.makeText(getContext(), "Session saved!", Toast.LENGTH_SHORT).show();
     }
 
     private void showOngoingClassUI() {
         // hide UI components
+        titleTextView.setVisibility(View.GONE);
+        descriptionTextView.setVisibility(View.GONE);
+        gifImageView.setVisibility(View.GONE);
         spinnerPromptTextView.setVisibility(View.GONE);
         classesSpinner.setVisibility(View.GONE);
         startBtn.setVisibility(View.GONE);
 
         // show UI components
         ongoingClassLayout.setVisibility(View.VISIBLE);
+        layoutElemanlarininGorunumunuDegistir(ongoingClassLayout, true);
+//        startTime.setVisibility(View.VISIBLE);
+//        endTime.setVisibility(View.VISIBLE);
+//        getOngoingClassButtonsLayout.setVisibility(View.VISIBLE);
+//        cancelBtn.setVisibility(View.VISIBLE);
+//        saveBtn.setVisibility(View.VISIBLE);
+//        numStudents.setVisibility(View.VISIBLE);
+//        listView.setVisibility(View.VISIBLE);
     }
 
     private void showNoClassUI() {
         // show UI components
+        titleTextView.setVisibility(View.VISIBLE);
+        descriptionTextView.setVisibility(View.VISIBLE);
+        gifImageView.setVisibility(View.VISIBLE);
         spinnerPromptTextView.setVisibility(View.VISIBLE);
         classesSpinner.setVisibility(View.VISIBLE);
         startBtn.setVisibility(View.VISIBLE);
 
         // hide UI components
         ongoingClassLayout.setVisibility(View.GONE);
+        layoutElemanlarininGorunumunuDegistir(ongoingClassLayout, false);
+//        startTime.setVisibility(View.GONE);
+//        endTime.setVisibility(View.GONE);
+//        getOngoingClassButtonsLayout.setVisibility(View.GONE);
+//        cancelBtn.setVisibility(View.GONE);
+//        saveBtn.setVisibility(View.GONE);
+//        numStudents.setVisibility(View.GONE);
+//        listView.setVisibility(View.GONE);
+    }
+
+    private void layoutElemanlarininGorunumunuDegistir(View view, boolean gorunur_mu_olsun) {
+        ViewGroup view_group;
+        try {
+            view_group = (ViewGroup) view;
+        } catch (ClassCastException e) {
+            return;
+        }
+
+        int view_eleman_sayisi = view_group.getChildCount();
+        for (int i = 0; i < view_eleman_sayisi; i++) {
+            View view_group_eleman = view_group.getChildAt(i);
+            if (gorunur_mu_olsun) {
+                view_group_eleman.setVisibility(View.VISIBLE);
+            } else {
+                view_group_eleman.setVisibility(View.GONE);
+            }
+            layoutElemanlarininGorunumunuDegistir(view_group_eleman, gorunur_mu_olsun);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        pref.edit().putBoolean(KEY_ONGOING_CLASS, ongoingClass).commit();
     }
 
     public static SessionFragment getDefaultInstance() {
@@ -284,9 +356,9 @@ public class SessionFragment extends Fragment {
     private void updateHypeInstancesLabel(int nHypeInstances)
     {
         if(nHypeInstances == 0)
-            hypeInstancesText.setText("No Hype Devices Found");
+            hypeInstancesText.setText("Checked in students: 0");
         else
-            hypeInstancesText.setText("Hype Devices Found: " + nHypeInstances);
+            hypeInstancesText.setText("Checked in students: " + nHypeInstances);
     }
 
     public void requestPermissions() {
@@ -341,6 +413,7 @@ public class SessionFragment extends Fragment {
         });
     }
 
+    /*
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -393,17 +466,18 @@ public class SessionFragment extends Fragment {
             }
         });
     }
+    */
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_connect, menu);
+        inflater.inflate(R.menu.menu_session, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_sign_out) {
-            SessionManager.Companion.getInstance(requireContext()).signOut();
+        if (item.getItemId() == R.id.action_settings) {
+            mListener.openSettings();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -428,5 +502,6 @@ public class SessionFragment extends Fragment {
         // TODO: Update argument type and name
         void onSessionFragmentInteraction(Uri uri);
         void startClass();
+        void openSettings();
     }
 }

@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context=".instructor.classes.ClassActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:srcCompat="@drawable/ic_arrow_back_black_24dp"/>
+    </android.support.v7.widget.Toolbar>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/class_info"
         android:layout_width="match_parent"
@@ -60,7 +71,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/days_of_the_week"
-            app:srcCompat="@drawable/ic_calendar_black_24dp"/>
+            app:srcCompat="@drawable/ic_calendar_colored_24dp"/>
 
         <TextView
             android:id="@+id/days_of_the_week"
@@ -79,7 +90,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/start_time"
             android:layout_margin="@dimen/text_margin"
-            app:srcCompat="@drawable/ic_time_black_24dp"/>
+            app:srcCompat="@drawable/ic_clock_colored_24dp"/>
 
         <TextView
             android:id="@+id/start_time"
@@ -125,14 +136,15 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="4dp"
         android:background="@color/light_grey"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22dp"
-        android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="24dp"
         android:text="Students"/>
 
     <android.support.v7.widget.RecyclerView

@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_access_time_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_back_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -29,8 +29,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_green_circle_24dp" />
-                            <entry key="sourceFile" value="C:\Users\Joccy\Documents\LAU Spring 2019\Capstone\Attendance Capstone\Icons\green_circle.svg" />
+                            <entry key="outputName" value="ic_check_icon_24dp" />
+                            <entry key="sourceFile" value="C:\Users\Joccy\Documents\LAU Spring 2019\Capstone\Attendance Capstone\Icons\check.svg" />
                           </map>
                         </option>
                       </PersistentState>

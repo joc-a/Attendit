@@ -74,7 +74,7 @@ public class OngoingClassActivity extends AppCompatActivity {
 
     private void updateHypeInstancesLabel(int nHypeInstances)
     {
-        TextView hypeInstancesText = (TextView) findViewById(R.id.hype_instances_label);
+        TextView hypeInstancesText = (TextView) findViewById(R.id.no_of_students);
 
         if(nHypeInstances == 0)
             hypeInstancesText.setText("No Hype Devices Found");

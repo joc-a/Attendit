@@ -62,6 +62,15 @@ public class MyApplication extends Application implements StateObserver, Network
         this.selectedClass = selectedClass;
     }
 
+    public void cancel() {
+        presentStudentsMap = new HashMap<>();
+        SessionFragment sessionFragment = SessionFragment.getDefaultInstance();
+
+        if (sessionFragment != null) {
+            sessionFragment.notifyStudentsChanged();
+        }
+    }
+
     public void configureHype() {
         if(isConfigured){
             return;
@@ -339,7 +348,9 @@ public class MyApplication extends Application implements StateObserver, Network
         // Cleaning up is always a good idea. It's not possible to communicate with instances
         // that were previously lost.
         if (isInstructor) {
-            getPresentStudentsMap().get(instance.getUserIdentifier() + "").lost = true;
+            if (getPresentStudentsMap().get(instance.getUserIdentifier() + "") != null) {
+                getPresentStudentsMap().get(instance.getUserIdentifier() + "").lost = true;
+            }
 
             // Notify the contact activity to refresh the UI
             SessionFragment sessionFragment = SessionFragment.getDefaultInstance();

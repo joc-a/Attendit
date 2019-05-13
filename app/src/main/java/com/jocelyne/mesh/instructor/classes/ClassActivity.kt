@@ -33,6 +33,10 @@ class ClassActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_class)
 
+        back_btn.setOnClickListener {
+            onBackPressed()
+        }
+
         classID = intent.getStringExtra("classID")
         currentUserID = FirebaseAuth.getInstance().currentUser?.uid!!
 

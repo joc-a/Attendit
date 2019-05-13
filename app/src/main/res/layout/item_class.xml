@@ -53,15 +53,6 @@
             android:textAppearance="?attr/textAppearanceListItem"
             android:text="Intro to Programming"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/transparent"
-            app:srcCompat="@drawable/ic_more_black_24dp"/>
-
         <ImageView
             android:id="@+id/calendar"
             android:layout_width="wrap_content"
@@ -70,7 +61,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/days_of_the_week"
-            app:srcCompat="@drawable/ic_calendar_black_24dp"/>
+            app:srcCompat="@drawable/ic_calendar_colored_24dp"/>
 
         <TextView
             android:id="@+id/days_of_the_week"
@@ -89,7 +80,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/start_time"
             android:layout_margin="@dimen/text_margin"
-            app:srcCompat="@drawable/ic_time_black_24dp"/>
+            app:srcCompat="@drawable/ic_clock_colored_24dp"/>
 
         <TextView
             android:id="@+id/start_time"

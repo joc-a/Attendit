@@ -32,11 +32,12 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_hype_chat_demo"
+        android:icon="@drawable/attendit_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".student.main.StudentMainActivity"></activity>
+        <activity android:name=".settings.SettingsActivity"></activity>
+        <activity android:name=".student.main.StudentMainActivity" />
         <activity android:name=".instructor.hype.OngoingClassActivity" />
         <activity android:name=".instructor.classes.ClassActivity" />
         <activity

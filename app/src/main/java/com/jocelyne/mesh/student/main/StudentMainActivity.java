@@ -2,6 +2,7 @@ package com.jocelyne.mesh.student.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.jocelyne.mesh.MyApplication;
 import com.jocelyne.mesh.R;
 import com.jocelyne.mesh.session_management.SessionManager;
+import com.jocelyne.mesh.settings.SettingsActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -25,7 +27,6 @@ public class StudentMainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private View confirmationView;
     private TextView classNameTextView;
-    private TextView absencesTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,8 @@ public class StudentMainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         confirmationView = findViewById(R.id.confirmation_layout);
+        confirmationView.setVisibility(View.GONE);
         classNameTextView = findViewById(R.id.class_name);
-        absencesTextView = findViewById(R.id.absences);
 
         final MyApplication myApplication = (MyApplication) getApplication();
         final StudentMainActivity studentMainActivity = this;
@@ -95,15 +96,20 @@ public class StudentMainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_connect, menu);
+        getMenuInflater().inflate(R.menu.menu_session, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_sign_out) {
-            SessionManager.Companion.getInstance(getApplicationContext()).signOut();
+        if (item.getItemId() == R.id.action_settings) {
+            openSettings();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 }
