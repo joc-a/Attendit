@@ -56,6 +56,7 @@ public class MyApplication extends Application implements StateObserver, Network
         registeredStudentsMap = map;
         registeredStudentsMap = new HashMap<>();
         registeredStudentsMap.put("201604514", null);
+        registeredStudentsMap.put("201510101", null);
     }
 
     public void setSelectedClass(Class selectedClass) {

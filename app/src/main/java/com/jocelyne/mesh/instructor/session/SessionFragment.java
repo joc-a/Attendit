@@ -1,9 +1,6 @@
 package com.jocelyne.mesh.instructor.session;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -39,7 +36,6 @@ import com.jocelyne.mesh.MyApplication;
 import com.jocelyne.mesh.R;
 import com.jocelyne.mesh.instructor.classes.Class;
 import com.jocelyne.mesh.instructor.hype.PresentStudentAdapter;
-import com.jocelyne.mesh.session_management.SessionManager;
 import com.jocelyne.mesh.session_management.Student;
 
 import java.lang.ref.WeakReference;

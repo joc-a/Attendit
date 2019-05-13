@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.jocelyne.mesh.MyApplication;
 import com.jocelyne.mesh.R;
-import com.jocelyne.mesh.session_management.SessionManager;
 import com.jocelyne.mesh.settings.SettingsActivity;
 
 import java.lang.ref.WeakReference;
