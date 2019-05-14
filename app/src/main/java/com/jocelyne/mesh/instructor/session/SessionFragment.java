@@ -255,6 +255,8 @@ public class SessionFragment extends Fragment {
         pref.edit().putBoolean(KEY_ONGOING_CLASS, ongoingClass).commit();
 
         // save session to db
+
+
         Toast.makeText(getContext(), "Session saved!", Toast.LENGTH_SHORT).show();
     }
 

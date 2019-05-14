@@ -10,6 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/windowBackground"
     tools:context=".login.LoginActivity">
 
     <!-- Login progress -->
@@ -113,7 +114,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                android:background="@drawable/background_save_button"
                 android:text="@string/action_login"
+                android:textAllCaps="false"
                 android:textStyle="bold" />
 
             <Button
@@ -122,7 +126,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/background_sign_up_button"
                 android:text="@string/action_sign_up"
+                android:textColor="#1d77f5"
+                android:textAllCaps="false"
                 android:textStyle="bold" />
 
         </LinearLayout>

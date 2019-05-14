@@ -29,8 +29,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_check_icon_24dp" />
-                            <entry key="sourceFile" value="C:\Users\Joccy\Documents\LAU Spring 2019\Capstone\Attendance Capstone\Icons\check.svg" />
+                            <entry key="outputName" value="ic_delete_24dp" />
+                            <entry key="sourceFile" value="C:\Users\Joccy\Documents\LAU Spring 2019\Capstone\Attendance Capstone\Icons\delete.svg" />
                           </map>
                         </option>
                       </PersistentState>

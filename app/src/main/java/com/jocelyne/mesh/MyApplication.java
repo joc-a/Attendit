@@ -54,9 +54,6 @@ public class MyApplication extends Application implements StateObserver, Network
 
     public void setRegisteredStudentsMap(Map<String, Student> map) {
         registeredStudentsMap = map;
-        registeredStudentsMap = new HashMap<>();
-        registeredStudentsMap.put("201604514", null);
-        registeredStudentsMap.put("201510101", null);
     }
 
     public void setSelectedClass(Class selectedClass) {
@@ -117,7 +114,7 @@ public class MyApplication extends Application implements StateObserver, Network
             Hype.setUserIdentifier(studentID);
 
             try {
-                Hype.setAnnouncement(MyApplication.announcement.getBytes("UTF-8"));
+                Hype.setAnnouncement("student".getBytes("UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 Hype.setAnnouncement(null);
                 e.printStackTrace();
@@ -226,6 +223,12 @@ public class MyApplication extends Application implements StateObserver, Network
                     instance.getStringIdentifier(), instance.getUserIdentifier()));
 
             if(shouldResolveInstance(instance)){
+                try {
+                    Hype.setAnnouncement("Check-in successful!".getBytes("UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    Hype.setAnnouncement(null);
+                    e.printStackTrace();
+                }
                 Hype.resolve(instance);
             } else {
                 try {
@@ -242,7 +245,7 @@ public class MyApplication extends Application implements StateObserver, Network
                 try {
                     String instanceAnnouncement = new String(instance.getAnnouncement(), "UTF-8");
                     // if student is registered in that class instance
-                    if (instanceAnnouncement.equalsIgnoreCase("Check-in successful!")) {
+                    if (!instanceAnnouncement.equalsIgnoreCase("class")) {
                         // This device is now capable of communicating
                         Hype.resolve(instance);
                         addToResolvedInstancesMap(instance);
